@@ -5,8 +5,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.util.concurrent.TimeUnit
 import kotlin.math.log
-const val BASE_URL="http://universities.hipolabs.com"
+
+const val BASE_URL = "http://universities.hipolabs.com"
+
 class RetrofitInstance {
     companion object {
         private val retrofit by lazy {
@@ -14,6 +17,9 @@ class RetrofitInstance {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)
             val client = OkHttpClient.Builder()
                 .addInterceptor(logging)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build()
             Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -22,7 +28,7 @@ class RetrofitInstance {
                 .build()
         }
 
-        val api by lazy {
+        val api: UniversityAPI by lazy {
             retrofit.create(UniversityAPI::class.java)
         }
     }

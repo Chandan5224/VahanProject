@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.vahanproject.MainActivity
 import com.example.vahanproject.R
 import com.example.vahanproject.databinding.FragmentFragSplashScreenBinding
 
@@ -16,6 +17,7 @@ class FragSplashScreen : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentFragSplashScreenBinding.inflate(layoutInflater)
+        (activity as MainActivity).actionBar?.hide()
     }
 
     override fun onCreateView(
