@@ -9,10 +9,12 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.vahanproject.MainViewModel
 import com.example.vahanproject.R
 import com.example.vahanproject.repository.UniversityRepository
 import com.example.vahanproject.util.ConnectivityObserver
+import com.example.vahanproject.util.MyApplication
 import kotlinx.coroutines.*
 
 class DataRefreshService : LifecycleService() {
@@ -22,8 +24,8 @@ class DataRefreshService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        viewModel = MainViewModel.getInstance(UniversityRepository())
-
+        val app = application as MyApplication
+        viewModel = app.getSharedViewModel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -34,7 +36,7 @@ class DataRefreshService : LifecycleService() {
 
         scope.launch {
             while (true) {
-//                viewModel.getUniversity()
+                viewModel.getUniversity()
                 Log.d("TAG", "Running Foreground Service...")
                 // Sleep for 10 seconds
                 delay(10_000)

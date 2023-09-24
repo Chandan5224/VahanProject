@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/fragSplashScreen">
+    app:startDestination="@id/fragHome">
 
     <fragment
         android:id="@+id/fragHome"
@@ -26,16 +26,5 @@
         <argument
             android:name="url"
             app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragSplashScreen"
-        android:name="com.example.vahanproject.fragment.FragSplashScreen"
-        android:label="fragment_frag_splash_screen"
-        tools:layout="@layout/fragment_frag_splash_screen" >
-        <action
-            android:id="@+id/action_fragSplashScreen_to_fragHome"
-            app:destination="@id/fragHome"
-            app:popUpTo="@id/fragSplashScreen"
-            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

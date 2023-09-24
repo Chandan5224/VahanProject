@@ -5,10 +5,10 @@
         <menu>
             <item
                 android:id="@+id/option1"
-                android:title="Option 1" />
+                android:title="On" />
             <item
                 android:id="@+id/option2"
-                android:title="Option 2" />
+                android:title="Off" />
         </menu>
     </item>
 </menu>

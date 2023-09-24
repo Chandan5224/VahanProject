@@ -9,15 +9,22 @@ import android.util.Log
 import android.view.*
 import android.view.MenuItem.OnActionExpandListener
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.vahanproject.databinding.ActivityMainBinding
 import com.example.vahanproject.repository.UniversityRepository
 import com.example.vahanproject.service.DataRefreshService
+import com.example.vahanproject.util.ConnectivityObserver
+import com.example.vahanproject.util.MyApplication
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -26,18 +33,24 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     private var isSearchViewOpen = true
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val uniRepository = UniversityRepository()
-//        val viewModelProviderFactory = ViewModelProviderFactory(uniRepository)
-//        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
-        viewModel = MainViewModel.getInstance(uniRepository)
-
+        onClickRequestPermission(binding.root)
+        val app = application as MyApplication
+        viewModel = app.getSharedViewModel()
         binding.toolbar.title = ""
         setSupportActionBar(binding.toolbar)
+
+        viewModel._connectivityStatus.observe(this, Observer { status ->
+            if (status != ConnectivityObserver.Status.Available) {
+                Snackbar.make(binding.root, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         // Customize the toolbar as needed
 //        binding.toolbar.setNavigationOnClickListener {
 //            if (isSearchViewOpen) {
@@ -51,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 //                onBackPressed()
 //            }
 //        }
+
         if (!foregroundServiceRunning()) {
             val serviceIntent = Intent(this, DataRefreshService::class.java)
             startService(serviceIntent)
@@ -99,20 +113,28 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.action_search -> {
-//                // Handle the search action here
-//                Log.d("TAG", "Run visible check")
-//                return true
-//            }
-//            // Handle other menu items here
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
-
-
-    private fun performSearch(it: String) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.option1 -> {
+                // Handle the search action here
+                if (!foregroundServiceRunning()) {
+                    Log.d("TAG", "Start foreground services by user")
+                    val serviceIntent = Intent(this, DataRefreshService::class.java)
+                    startService(serviceIntent)
+                }
+                return true
+            }
+            R.id.option2 -> {
+                if (foregroundServiceRunning()) {
+                    Log.d("TAG", "Stop foreground services by user")
+                    val serviceIntent = Intent(this, DataRefreshService::class.java)
+                    stopService(serviceIntent)
+                }
+                return true
+            }
+            // Handle other menu items here
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun foregroundServiceRunning(): Boolean {
