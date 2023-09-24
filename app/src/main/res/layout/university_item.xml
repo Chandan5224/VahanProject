@@ -90,13 +90,14 @@
 
         <TextView
             android:id="@+id/tvWebsite"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="Website Link"
             android:textColor="@color/url_color"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/tvUniversityName" />
     </androidx.constraintlayout.widget.ConstraintLayout>

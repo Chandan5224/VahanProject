@@ -46,6 +46,7 @@ class DataRefreshService : LifecycleService() {
         return START_STICKY
     }
 
+
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         return null

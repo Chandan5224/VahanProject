@@ -3,6 +3,7 @@ package com.example.vahanproject.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -43,6 +44,7 @@ class UniversityAdapter(private val listener: OnItemsClick) :
         holder.uniWebsite.text = item.webPages[0]
         holder.uniCountry.text = item.country
         holder.uniWebsite.setOnClickListener {
+            it.startAnimation(AnimationUtils.loadAnimation(it.context, R.anim.bounce))
             listener.onClickWebsite(item.webPages[0])
         }
     }

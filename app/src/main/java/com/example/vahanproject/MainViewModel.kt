@@ -34,7 +34,7 @@ class MainViewModel(
 
     fun getUniversity() = viewModelScope.launch {
         universityList.postValue(Resource.Loading())
-        if (_connectivityStatus.value == ConnectivityObserver.Status.Available) {
+        if (_connectivityStatus.value == ConnectivityObserver.Status.Available || _connectivityStatus.value == ConnectivityObserver.Status.Idle) {
             try {
                 val response = universityRepository.getUniversity()
                 if (response.isSuccessful) {
